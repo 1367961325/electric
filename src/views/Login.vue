@@ -4,7 +4,7 @@
  * @@Company: DCIT-SH
  * @Date: 2021-04-14 15:52:39
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-04-17 18:31:00
+ * @LastEditTime: 2021-04-17 19:06:13
 -->
 <template>
     <div class="login">
@@ -53,13 +53,16 @@ export default {
     methods: {
         submitForm(formName) {
         this.$refs[formName].validate((valid) => {
+        //判断是否符合验证规则
           if (valid) {
             var data = {
                 un:this.ruleForm.name,
                 ps:this.ruleForm.pass,
             }
+        //发送登录请求
             login(data).then(res=>{
                 console.log(res);
+                //判断是否登陆成功
                 if(res.meta.status == 200){
                     sessionStorage.setItem('token',res.data.token)
                     this.$router.replace('/home');

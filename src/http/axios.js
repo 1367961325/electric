@@ -5,7 +5,7 @@
  * @Author: YAP
  * @Date: 2021-04-13 14:35:49
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-04-17 18:03:08
+ * @LastEditTime: 2021-04-17 18:52:38
  */
 import Http from './http'
 //注册登录
@@ -20,3 +20,8 @@ export function login(data){
     })
 }
 //menu数据
+export function menusList(){
+    return Http({
+        url:'/api/private/v1/menus',
+    })
+}
