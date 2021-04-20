@@ -3,13 +3,23 @@
 </template>
 
 <script>
+import {shopList} from '../http/axios.js'
 export default {
   props: {},
   data() {
     return {};
   },
   methods: {},
-  components: {},
+  components: {
+
+
+  },
+  mounted(){
+shopList().then(res=>{
+
+  console.log(res);
+})
+  }
 };
 </script>
 

@@ -9,19 +9,26 @@
  */
 import Http from './http'
 //注册登录
-export function login(data){
+export function login(data) {
     return Http({
-        url:'/api/private/v1/login',
-            data:{
-                username:data.un,
-                password:data.ps
-            },
-            method:'post'
+        url: '/api/private/v1/login',
+        data: {
+            username: data.un,
+            password: data.ps
+        },
+        method: 'post'
     })
 }
 //menu数据
-export function menusList(){
+export function menusList() {
     return Http({
-        url:'/api/private/v1/menus',
+        url: '/api/private/v1/menus',
+    })
+}
+
+//商品数据
+export function shopList() {
+    return Http({
+        url: '/api/goods'
     })
 }

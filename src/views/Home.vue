@@ -37,7 +37,9 @@
                 :index="String(j.id)"
                 v-for="(j, ind) in i.children"
                 :key="ind"
-                ><router-link :to="'/Home/'+j.path">{{ j.authName }}</router-link></el-menu-item
+                ><router-link :to="'/Home/' + j.path"
+                  ><i class="el-icon-menu"></i> {{ j.authName }}</router-link
+                ></el-menu-item
               >
             </el-submenu>
           </el-menu>
@@ -123,9 +125,26 @@ export default {
 body {
   .el-menu {
     border: 0;
-    .el-menu-item{
-      a{
+    .el-menu-item {
+      padding: 0;
+      padding-left: 30px !important;
+      .router-link-active {
+        color: #409eff;
+      }
+      a {
+        i {
+          margin-right: 10px;
+          img {
+            width: 14px;
+            height: 14px;
+          }
+        }
+        display: flex;
+        align-items: center;
         color: white;
+        width: 100%;
+        height: 100%;
+        box-sizing: border-box;
       }
     }
   }
