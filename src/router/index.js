@@ -26,39 +26,77 @@ const routes = [{
         // which is lazy-loaded when the route is visited.
         component: () =>
             import ( /* webpackChunkName: "home" */ '../views/Home.vue'),
+        // redirect: 'rights',
         children: [{
-            path: 'users',
-            component: () =>
-                import ( /* webpackChunkName: "home" */ '../components/users.vue')
-        }, {
-            path: 'rights',
-            component: () =>
-                import ( /* webpackChunkName: "home" */ '../components/rights.vue')
-        }, {
-            path: 'reports',
-            component: () =>
-                import ( /* webpackChunkName: "home" */ '../components/reports.vue')
-        }, {
-            path: 'orders',
-            component: () =>
-                import ( /* webpackChunkName: "home" */ '../components/orders.vue')
-        }, {
-            path: 'goods',
-            component: () =>
-                import ( /* webpackChunkName: "home" */ '../components/goods.vue')
-        }, {
-            path: 'roles',
-            component: () =>
-                import ( /* webpackChunkName: "home" */ '../components/roles.vue')
-        }, {
-            path: 'params',
-            component: () =>
-                import ( /* webpackChunkName: "home" */ '../components/params.vue')
-        }, {
-            path: 'categories',
-            component: () =>
-                import ( /* webpackChunkName: "home" */ '../components/categories.vue')
-        }, ]
+                path: 'users',
+                component: () =>
+                    import ( /* webpackChunkName: "users" */ '../components/users.vue')
+            },
+            {
+                path: 'rights',
+                component: () =>
+                    import ( /* webpackChunkName: "rights" */ '../components/rights.vue')
+            },
+            {
+                path: 'reports',
+                component: () =>
+                    import ( /* webpackChunkName: "reports" */ '../components/reports.vue')
+            },
+            {
+                path: 'orders',
+                component: () =>
+                    import ( /* webpackChunkName: "orders" */ '../components/orders.vue')
+            },
+            {
+                path: 'goods',
+                component: () =>
+                    import ( /* webpackChunkName: "goods" */ '../components/shop/goods.vue')
+            },
+            {
+                path: 'addShop',
+                component: () =>
+                    import ( /* webpackChunkName: "addshop" */ '../components/shop/addshop.vue'),
+                children: [{
+                        path: 'argument',
+                        component: () =>
+                            import ( /* webpackChunkName: "addshop" */ '../components/shop/addshop/argument.vue'),
+                    }, {
+                        path: 'content',
+                        component: () =>
+                            import ( /* webpackChunkName: "addshop" */ '../components/shop/addshop/content.vue'),
+                    }, {
+                        path: 'message',
+                        component: () =>
+                            import ( /* webpackChunkName: "addshop" */ '../components/shop/addshop/message.vue'),
+                    }, {
+                        path: 'property',
+                        component: () =>
+                            import ( /* webpackChunkName: "addshop" */ '../components/shop/addshop/property.vue'),
+                    }, {
+                        path: 'shopimg',
+                        component: () =>
+                            import ( /* webpackChunkName: "addshop" */ '../components/shop/addshop/shopimg.vue'),
+                    },
+
+                ]
+            },
+            {
+                path: 'roles',
+                component: () =>
+                    import ( /* webpackChunkName: "home" */ '../components/roles.vue')
+            },
+            {
+                path: 'params',
+                component: () =>
+                    import ( /* webpackChunkName: "home" */ '../components/shop/params.vue')
+            },
+            {
+                path: 'categories',
+                component: () =>
+                    import ( /* webpackChunkName: "home" */ '../components/shop/categories.vue')
+            },
+        ],
+
 
 
     },

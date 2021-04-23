@@ -10,7 +10,7 @@
     <div class="login">
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" >
             <div class = 'loginImg'>
-                <img src ='./../assets/logo.png'></img>
+                <img src ='./../assets/logo.png'>
             </div>
             <el-form-item prop="name">
                 <el-input placeholder="请输入用户名"  v-model="ruleForm.name" clearable prefix-icon="el-icon-user-solid"></el-input>

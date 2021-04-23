@@ -7,11 +7,11 @@
  * @LastEditors: Please set LastEditors
  * @LastEditTime: 2021-04-17 18:28:48
  */
-module.exports={
-    devServer:{
-        proxy:{
-            '/api':{
-                target:'http://192.168.1.42:8888/',
+module.exports = {
+    devServer: {
+        proxy: {
+            '/api': {
+                target: 'http://localhost:8888',
                 pathRewrite: { '^/api': '' },
             }
         }

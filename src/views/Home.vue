@@ -9,14 +9,14 @@
 -->
 <template>
   <div id="header">
-    <el-container>
+    <el-container class="all">
       <el-header style="height: '58px'">
         <h1>电商后台管理系统</h1>
         <router-link to="/Login"><el-button>退出</el-button></router-link>
       </el-header>
-      <el-container>
+      <el-container class='content'>
         <el-aside width="200px">
-          <h2><img src="../assets/img/welcome.png" alt="" /></h2>
+          <h2><img src="../assets/img/welcome.png" /></h2>
           <el-menu
             default-active="2"
             class="el-menu-vertical-demo"
@@ -37,14 +37,27 @@
                 :index="String(j.id)"
                 v-for="(j, ind) in i.children"
                 :key="ind"
-                ><router-link :to="'/Home/' + j.path"
-                  ><i class="el-icon-menu"></i> {{ j.authName }}</router-link
+                @click="toright(i, j)"
+                ><router-link :to="'/home/' + j.path">
+                  <i class="el-icon-menu"></i> {{ j.authName }}</router-link
                 ></el-menu-item
               >
             </el-submenu>
           </el-menu>
         </el-aside>
-        <el-main><router-view></router-view></el-main>
+        <el-main>
+          <el-breadcrumb separator-class="el-icon-arrow-right">
+            <el-breadcrumb-item>首页</el-breadcrumb-item>
+
+            <el-breadcrumb-item>
+              {{ theFirst.authName }}
+            </el-breadcrumb-item>
+            <el-breadcrumb-item>
+              {{ theSecond.authName }}
+            </el-breadcrumb-item>
+          </el-breadcrumb>
+          <router-view></router-view>
+        </el-main>
       </el-container>
     </el-container>
   </div>
@@ -64,9 +77,18 @@ export default {
         require("../assets/img/订单.png"),
         require("../assets/img/数据.png"),
       ],
+      theFirst: "",
+      theSecond: "",
+      istrue: false,
     };
   },
-  methods: {},
+  methods: {
+    toright(i, j) {
+      this.theFirst = i;
+      this.theSecond = j;
+      console.log(i, j);
+    },
+  },
   components: {},
   mounted() {
     menusList().then((res) => {
@@ -82,24 +104,33 @@ export default {
 #header {
   height: 100%;
 }
-.el-header {
-  background-color: #373d41;
-  font-size: 20px;
-  text-align: center;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-left: 15px;
-  h1 {
-    line-height: 58px;
-    color: #fff;
+.all {
+  height: 100%;
+  .el-header {
+    width: 100%;
+    top: 0px;
+    z-index: 100;
+    background-color: #373d41;
+    font-size: 20px;
+    text-align: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 15px;
+    h1 {
+      line-height: 58px;
+      color: #fff;
+    }
+    .el-button {
+      padding: 14px 21px;
+      font-size: 19px;
+      color: #fff;
+      background-color: #909399;
+      border: 0px;
+    }
   }
-  .el-button {
-    padding: 14px 21px;
-    font-size: 19px;
-    color: #fff;
-    background-color: #909399;
-    border: 0px;
+  .content{
+    overflow: hidden;
   }
 }
 
@@ -115,14 +146,16 @@ export default {
     align-items: center;
   }
 }
-
-.el-main {
-  background-color: #e9eef3;
-  color: #333;
-  text-align: center;
-  line-height: 160px;
-}
 body {
+  .el-main {
+    color: #606266;
+    padding: 0 2px 0 19px;
+    background-color: #eaedf1;
+    .el-breadcrumb {
+      margin-top: 21px;
+      margin-bottom: 17px;
+    }
+  }
   .el-menu {
     border: 0;
     .el-menu-item {
@@ -147,9 +180,6 @@ body {
         box-sizing: border-box;
       }
     }
-  }
-  .el-container {
-    height: 100%;
   }
   .el-menu-vertical-demo {
     .el-submenu__title {

@@ -1,6 +1,6 @@
 <template>
     <div>
-我是categories
+商品内容
     </div>
 </template>
 

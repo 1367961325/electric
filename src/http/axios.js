@@ -26,9 +26,31 @@ export function menusList() {
     })
 }
 
-//商品数据
-export function shopList() {
+//商品列表数据
+export function shopList({ pagenum, pagesize }) {
     return Http({
-        url: '/api/goods'
+        url: '/api/private/v1/goods',
+        params: { pagenum, pagesize },
     })
 }
+
+//删除商品列表数据
+export function shopDel(id) {
+    return Http({
+        url: '/api/private/v1/goods' + "/" + id,
+        method: 'delete',
+    })
+}
+
+
+//添加商品
+// export function shopAdd(id) {
+//     return Http({
+//         url: '/api/private/v1/goods',
+//         data: {
+
+
+//         },
+//         method: 'post',
+//     })
+// }
