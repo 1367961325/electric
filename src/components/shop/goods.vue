@@ -5,12 +5,18 @@
         <el-input
           placeholder="请输入内容"
           class="input-with-select"
-          v-model="p"
+          v-model="srh"
         >
-          <el-button slot="append" icon="el-icon-search"></el-button>
+          <el-button
+            slot="append"
+            icon="el-icon-search"
+            @click="search"
+          ></el-button>
         </el-input>
 
-        <el-button type="primary" class="add_shop" @click='add'>添加商品</el-button>
+        <el-button type="primary" class="add_shop" @click="add"
+          >添加商品</el-button
+        >
       </div>
       <el-table :data="tableData" border style="width: 100%" stripe>
         <el-table-column type="index" label="#" width="47"></el-table-column>
@@ -27,10 +33,13 @@
           width="150"
         ></el-table-column>
         <el-table-column label="操作">
+          <!-- 编辑 -->
           <template slot-scope="scope">
             <el-button size="mini" @click="handleEdit(scope.$index, scope.row)"
               >编辑</el-button
             >
+
+            <!-- 删除 -->
             <el-button
               size="mini"
               type="danger"
@@ -61,6 +70,47 @@
         </el-pagination>
       </div>
     </div>
+    <el-dialog title="收货地址" :visible.sync="dialogFormVisible">
+      <el-form :model="form" :rules="qqq">
+        <el-form-item label="商品ID" :label-width="formLabelWidth" prop="id">
+          <el-input v-model="id" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item
+          label="商品名称"
+          :label-width="formLabelWidth"
+          prop="name"
+        >
+          <el-input v-model="form.goods_name" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item
+          label="商品价格"
+          :label-width="formLabelWidth"
+          prop="price"
+        >
+          <el-input v-model="form.goods_price" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item
+          label="商品数量"
+          :label-width="formLabelWidth"
+          prop="number"
+        >
+          <el-input v-model="form.goods_number" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item
+          label="商品重量"
+          :label-width="formLabelWidth"
+          prop="weight"
+        >
+          <el-input v-model="form.goods_weight" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="submit"
+          >确 定</el-button
+        >
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -68,6 +118,8 @@
 import moment from "moment";
 import { shopList } from "../../http/axios.js";
 import { shopDel } from "../../http/axios.js";
+import { shopSearch } from "../../http/axios.js";
+import { shopChange } from "../../http/axios.js";
 export default {
   props: {},
   data() {
@@ -76,15 +128,63 @@ export default {
       pagenum: 1,
       pagesize: 10,
       total: "",
-      p: "",
+      srh: "",
       dialogVisible: false,
       iswhat: "",
       edit: "",
       del: "",
       innerVisible: "",
+      dialogFormVisible: false,
+      formLabelWidth: "90px",
+      id: "",
+      form: {
+        goods_name: "",
+        goods_price: "",
+        goods_number: "",
+        goods_weight: "",
+      },
+      qqq: {
+        id: [
+          { required: true, message: "id不能为空" }
+        ],
+        name: [
+          { required: true, message: "名字不能为空" }
+        ],
+        price: [
+          { required: true, message: "价格不能为空" },
+          { type: "number", message: "价格必须为数字值" },
+        ],
+        number: [
+          { required: true, message: "数量不能为空" },
+          { type: "number", message: "数量必须为数字值" },
+        ],
+        weight: [
+          { required: true, message: "重量不能为空" },
+          { type: "number", message: "重量必须为数字值" },
+        ],
+      },
     };
   },
   methods: {
+    //修改提交
+    submit(){
+      console.log(this.form);
+      console.log(this.id);
+      shopChange(this.id,this.form).then(res=>{
+        console.log(res);
+      })
+    },
+    //查询
+    search() {
+      if (this.srh == "") {
+        this.tableData = [];
+      }
+      shopSearch(this.srh).then((res) => {
+        console.log(res);
+        this.tableData = [res.data];
+        console.log(this.tableData);
+      });
+    },
     //时间格式
     dateFormat: function (row, column) {
       var date = row[column.property];
@@ -92,10 +192,11 @@ export default {
       if (date == undefined) {
         return "";
       }
-      return moment(date).format("YYYY-MM-DD HH:mm:ss");
+      return moment(date * 1000).format("YYYY-MM-DD HH:mm:ss");
     },
     //elementui自带函数
     handleEdit(index, row) {
+      this.dialogFormVisible = true;
       this.edit = row;
       console.log(index, row);
     },
@@ -151,9 +252,9 @@ export default {
       this.dialogVisible = false;
     },
     //添加商品跳转
-    add(){
-        this.$router.replace('/home/addShop');
-    }
+    add() {
+      this.$router.replace("/home/addShop");
+    },
   },
   components: {},
   mounted() {
@@ -202,6 +303,8 @@ body {
 }
 
 body .is-leaf .cell {
+  display: flex;
+  justify-content: space-between;
   color: #fff;
 }
 body {

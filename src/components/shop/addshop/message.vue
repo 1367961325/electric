@@ -1,75 +1,71 @@
 <template>
   <div>
     <el-form
-      :model="ruleForm" 
+      :model="ruleForm"
       :rules="rules"
       ref="ruleForm"
       class="demo-ruleForm"
+      label-position='top'
     >
       <el-form-item label="商品名称" prop="name">
         <el-input v-model="ruleForm.name"></el-input>
       </el-form-item>
-      <el-form-item>
-        <label for="ruleForm.price" class="el-form-item__label"
-          ><span>*</span>商品价格{{ price }}</label
-        >
-        <el-input-number
-          class="pri"
-          v-model="ruleForm.price"
-          controls-position="right"
-          @change="handleChange"
-          :min="1"
-        ></el-input-number>
-        <div class="el-form-item__error" v-show="istrue">请输入商品价格</div>
+      <el-form-item label="商品价格" prop="price">
+        <el-input v-model="ruleForm.price" type='number' min='1'></el-input>
       </el-form-item>
 
       <el-form-item label="商品重量" prop="weight">
-        <el-input v-model="ruleForm.weight"></el-input>
+        <el-input v-model="ruleForm.weight" type='number'></el-input>
       </el-form-item>
       <el-form-item label="商品数量" prop="num">
-        <el-input v-model="ruleForm.num"></el-input>
+        <el-input v-model="ruleForm.num" type='number'></el-input>
       </el-form-item>
       <el-form-item label="商品分类" prop="region">
-        <el-select v-model="ruleForm.region" placeholder="请选择商品分类">
-          <el-option label="男" value="shanghai"></el-option>
-          <el-option label="女" value="beijing"></el-option>
-          <el-option label="不明" value="beijing"></el-option>
-        </el-select>
-      </el-form-item>
-
-      <el-form-item>
-        <el-button type="primary" @click="submitForm('ruleForm')"
-          >立即创建</el-button
-        >
-        <el-button @click="resetForm('ruleForm')">重置</el-button>
+        
+        <div class="block">
+          <span class="demonstration"></span>
+          <el-cascader
+            ref='cascaderAdd'
+            :options="options"
+            @change="handleChange"
+            :props='props'
+          >
+          </el-cascader>
+        </div>
       </el-form-item>
     </el-form>
   </div>
 </template>
 
 <script>
+import { shopType } from "../../../http/axios.js";
+// import { shopArgR } from "../../../http/axios.js";
 export default {
   data() {
     return {
       ruleForm: {
+        num:'',
         name: "",
         region: "",
         date1: "",
         date2: "",
         delivery: false,
-        type: [],
         resource: "",
         desc: "",
-      price: "",
+        price: "",
       },
+      props:{
+        label:'cat_name', 
+        value: 'cat_id',
+      },
+      options:[],
+      cateId:'',
+      catename:'',
       istrue: false,
       rules: {
-        name: [
-          { required: true, message: "请填写商品名称", trigger: "blur" }
-          ],
-        price: [
-          { required: true, message: "请填写商品价格", trigger: "blur" }
-          ],
+        name: [{ required: true, message: "请填写商品名称", trigger: "blur" }],
+        price: [{ required: true, message: "请填写商品价格", trigger: "blur",
+        min:1 }],
         weight: [
           { required: true, message: "请填写商品重量", trigger: "blur" },
         ],
@@ -95,14 +91,49 @@ export default {
       this.$refs[formName].resetFields();
     },
     handleChange(value) {
-      console.log(value);
+     this.cateId=value;
+      this.catename=this.$refs['cascaderAdd'].getCheckedNodes()[0].pathLabels;
+      console.log(this.catename);
+      console.log(this.cateId);
+      this.$store.state.cateId=this.cateId;
+      this.$store.state.addForm.goods_cat=this.cateId.toString();
+      console.log(this.$store.state.addForm.goods_cat);
+      console.log(this.$store.state.cateId);
     },
+  },
+  computed:{
+    cate(){
+     this.$store.state.cateId= this.cateId;
+     this.$store.state.cateName= this.catename;
+      console.log(this.$store.state.cateId);
+      console.log(this.$store.state.cateName);
+      return this.$store.state.cateId;
+    }
+
+  },
+  mounted() {
+    shopType()
+      .then((res) => {
+        this.options=res.data;
+        // console.log(res);
+      });
+
+      
+  },
+  updated() {
+    console.log(this.ruleForm);
+    console.log(this.$store.state.addForm);
+    this.$store.state.addForm.goods_name=this.ruleForm.name;
+    this.$store.state.addForm.goods_price=this.ruleForm.price;
+    this.$store.state.addForm.goods_weight=this.ruleForm.weight;
+    this.$store.state.addForm.goods_number=this.ruleForm.num;
+    console.log(this.$store.state.addForm.goods_cat.length);
   },
 };
 </script>
 
-<style scoped lang="less">
-body .el-form-item label {
+<style lang="less">
+body .demo-ruleForm .el-form-item label {
   width: 100%;
   text-align: left;
   span {
@@ -117,7 +148,6 @@ body .el-form-item label {
 .pri {
   width: 100%;
   .el-input {
-    height: 50px;
     .el-input__inner {
       text-align: left;
     }

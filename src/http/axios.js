@@ -42,6 +42,66 @@ export function shopDel(id) {
     })
 }
 
+//商品分类信息
+export function shopType() {
+    return Http({
+        url: '/api/private/v1/categories',
+    })
+}
+
+//商品动态参数
+export function shopArg({ cateId }) {
+    return Http({
+        url: `/api/private/v1/categories/${cateId}/attributes`,
+        params: {
+            sel: 'many',
+
+        },
+    })
+}
+
+//商品静态属性
+export function shopPro({ cateId, name }) {
+    return Http({
+        url: `/api/private/v1/categories/${cateId}/attributes`,
+        params: {
+            sel: 'only',
+            name
+        },
+    })
+}
+
+//提交添加商品
+export function shopSubmit(addForm) {
+    return Http({
+        url: '/api/private/v1/goods',
+        method: 'post',
+        data: addForm,
+    })
+}
+
+//查询商品
+export function shopSearch(id) {
+    return Http({
+        url: `/api/private/v1/goods/${id}`
+    })
+}
+
+//提交修改商品
+export function shopChange(id, addForm) {
+    return Http({
+        url: `/api/private/v1/goods/${id}`,
+        method: 'put',
+        params: addForm
+    })
+
+
+}
+
+
+
+
+
 
 //添加商品
 // export function shopAdd(id) {

@@ -1,6 +1,10 @@
 <template>
     <div>
-商品属性
+        <el-form>
+            <el-form-item v-for="(i,index) in Pro" :key='index' :label='i.attr_name'>
+                <el-input v-model='i.attr_vals'></el-input>
+            </el-form-item>
+        </el-form>
     </div>
 </template>
 
@@ -16,6 +20,11 @@ export default {
     },
     methods: {
 
+    },
+    computed:{
+        Pro(){
+            return this.$store.state.attrs_pro;
+        }
     },
     components: {
 
