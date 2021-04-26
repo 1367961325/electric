@@ -99,18 +99,38 @@ export function shopChange(id, addForm) {
 }
 
 
+//添加参数和属性
+export function addArg(id, addFrom) {
+    return Http({
+        url: `/api/private/v1/categories/${id}/attributes`,
+        data: addFrom,
+        method: 'post',
+    })
+}
 
+//删除参数和属性
+export function delArg(id, attr_id) {
+    return Http({
+        url: `/api/private/v1/categories/${id}/attributes/${attr_id}`,
+        method: 'delete',
+    })
+}
 
+//编辑参数和属性
+export function changeArg(id, attr_id, changeForm) {
+    return Http({
+        url: `/api/private/v1/categories/${id}/attributes/${attr_id}`,
+        method: 'put',
+        data: changeForm
+    })
+}
 
+//编辑参数和属性的小标签
+export function changeTag(id, attr_id, changeTag) {
+    return Http({
+        url: `/api/private/v1/categories/${id}/attributes/${attr_id}`,
+        method: 'put',
+        data: changeTag
+    })
 
-//添加商品
-// export function shopAdd(id) {
-//     return Http({
-//         url: '/api/private/v1/goods',
-//         data: {
-
-
-//         },
-//         method: 'post',
-//     })
-// }
+}
