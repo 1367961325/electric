@@ -35,25 +35,25 @@
                     v-for="(i, index) in scope.row.attr_vals"
                     :key="index"
                     closable
-                     @close="tagClose(i,scope.row)"
+                    @close="tagClose(scope.row, i)"
                   >
                     {{ i }}
                   </el-tag>
                   <el-input
                     class="input-new-tag"
-                    v-if="inputVisible"
-                    v-model="inputValue"
+                    v-if="scope.row.inputVisible"
+                    v-model="scope.row.inputValue"
                     ref="saveTagInput"
                     size="small"
-                    @keyup.enter.native="handleInputConfirm"
-                    @blur="handleInputConfirm"
+                    @keyup.enter.native="handleInputConfirm(scope.row)"
+                    @blur="handleInputConfirm(scope.row)"
                   >
                   </el-input>
                   <el-button
                     v-else
                     class="button-new-tag"
                     size="small"
-                    @click="showInput"
+                    @click="showInput(scope.row)"
                     >+ New Tag</el-button
                   >
                 </template>
@@ -91,25 +91,25 @@
                     v-for="(i, index) in scope.row.attr_vals"
                     :key="index"
                     closable
-                    @close="tagClose(i,scope.row)"
+                    @close="tagClose(scope.row, i)"
                   >
                     {{ i }}
                   </el-tag>
                   <el-input
                     class="input-new-tag"
-                    v-if="inputVisible"
+                    v-if="scope.row.inputVisible"
                     v-model="scope.row.inputValue"
                     ref="saveTagInput"
                     size="small"
-                    @keyup.enter.native="handleInputConfirm"
-                    @blur="handleInputConfirm"
+                    @keyup.enter.native="handleInputConfirm(scope.row)"
+                    @blur="handleInputConfirm(scope.row)"
                   >
                   </el-input>
                   <el-button
                     v-else
                     class="button-new-tag"
                     size="small"
-                    @click="showInput"
+                    @click="showInput(scope.row)"
                     >+ New Tag</el-button
                   >
                 </template>
@@ -159,6 +159,28 @@
             <el-button type="primary" @click="add">确 定</el-button>
           </span>
         </el-dialog>
+        <el-dialog
+          :title="'修改' + type"
+          :visible.sync="dialogVisibleCha"
+          width="30%"
+          @close="handleClose"
+        >
+          <el-form
+            :model="addForm"
+            :rules="addFormRules"
+            ref="addRuleRef"
+            label-width="80px"
+          >
+            <el-form-item :label="type" prop="name">
+              <el-input v-model="theName"></el-input>
+            </el-form-item>
+          </el-form>
+
+          <span slot="footer" class="dialog-footer">
+            <el-button @click="dialogVisibleCha = false">取 消</el-button>
+            <el-button type="primary" @click="change">确 定</el-button>
+          </span>
+        </el-dialog>
       </div>
     </div>
   </div>
@@ -176,8 +198,10 @@ export default {
   props: {},
   data() {
     return {
-      inputVisible: false,
-      inputValue: '',
+      theName: "",
+      // inputVisible: true,
+      inputValue: "",
+      dialogVisibleCha: false,
       dialogVisible: false,
       type: "",
       options: [],
@@ -201,46 +225,57 @@ export default {
         attr_name: "",
         attr_sel: "",
       },
-      changeTag:{
+      changeTag: {
         attr_name: "",
         attr_sel: "",
         attr_vals: "",
-      }
+      },
+      cat_id:'',
+      attr_id:'',
     };
   },
   methods: {
-    //关闭标签
-    tagClose(i,data){
-      data.attr_vals.splice(data.attr_vals.indexOf(i), 1);
-      this.changeTag.attr_vals=data.attr_vals.toString();
-      this.changeTag.attr_name=data.attr_name;
-      if(this.activeName== "first"){
-        this.changeTag.attr_sel='many';
-        console.log(data);
-        console.log(this.changeTag);
-        changeTag(data.cat_id,data.attr_id,this.changeTag).then(res=>{
-        console.log(res);
-      })
-      }else{
-        this.changeTag.attr_sel='only';
-        console.log(data);
-        console.log(this.changeTag);
-        changeTag(data.cat_id,data.attr_id,this.changeTag).then(res=>{
-        console.log(res);
-      });
+    //选择商品分类
+    handleChange(val) {
+      console.log(val);
+      console.log(this.value);
+      if (this.value.length !== 3) {
+        this.value = [];
+        this.manyTableData = [];
+        this.onlyTableData = [];
+      } else {
+        this.getParamsList();
       }
-      console.log(i);
     },
-     showInput() {
-        this.inputVisible = true;
-        this.$nextTick(_ => {
-          this.$refs.saveTagInput.$refs.input.focus();
-        });
-      },
-    handleInputConfirm() {
-        this.inputVisible = false;
-        this.inputValue = '';
-      },
+    handleInputConfirm(scope) {
+      console.log(scope);
+      console.log(scope.inputValue);
+      if (scope.inputValue == undefined) {
+        scope.inputValue = "";
+        scope.inputVisible = false;
+      } else if (scope.inputValue.trim().length === 0) {
+        scope.inputValue = "";
+        scope.inputVisible = false;
+        return;
+      } else {
+        scope.attr_vals.push(scope.inputValue.trim());
+        scope.inputValue = "";
+        scope.inputVisible = false;
+        this.changeTag.attr_name = scope.attr_name;
+        this.changeTag.attr_vals = scope.attr_vals.toString();
+        if (this.activeName == "first") {
+          this.changeTag.attr_sel = "many";
+          changeTag(scope.cat_id, scope.attr_id, this.changeTag).then((res) => {
+            console.log(res);
+          });
+        } else {
+          this.changeTag.attr_sel = "only";
+          changeTag(scope.cat_id, scope.attr_id, this.changeTag).then((res) => {
+            console.log(res);
+          });
+        }
+      }
+    },
     add() {
       this.dialogVisible = false;
       if (this.activeName == "first") {
@@ -292,23 +327,13 @@ export default {
     },
     showTagInput(row) {
       row.tagInputVisible = true;
-      //  this.$nextTick(() => { this.$refs.saveTagInput.$refs.input.focus()
-      //   })
+      this.$nextTick(() => {
+        this.$refs.saveTagInput.$refs.input.focus();
+      });
     },
     //关闭添加窗口
     handleClose() {
       this.$refs.addRuleRef.resetFields();
-    }, //选择商品分类
-    handleChange(val) {
-      console.log(val);
-      console.log(this.value);
-      if (this.value.length !== 3) {
-        this.value = [];
-        this.manyTableData = [];
-        this.onlyTableData = [];
-      } else {
-        this.getParamsList();
-      }
     },
 
     //tabs标签
@@ -321,6 +346,8 @@ export default {
           // 把字符串的可选项，分割为数组，重新赋值给attr_vals
           item.attr_vals =
             item.attr_vals.length > 0 ? item.attr_vals.split(",") : [];
+          item.inputVisible = false;
+          item.inputValue = "";
         });
         this.manyTableData = res.data;
         // this.addForm.attr_name=res.data
@@ -331,20 +358,74 @@ export default {
           // 把字符串的可选项，分割为数组，重新赋值给attr_vals
           item.attr_vals =
             item.attr_vals.length > 0 ? item.attr_vals.split(",") : [];
+          item.inputVisible = false;
+          item.inputValue = "";
         });
         this.onlyTableData = res.data;
         console.log(this.onlyTableData);
       });
     },
     handleEdit(index, row) {
+      this.dialogVisibleCha = true;
       console.log(index, row);
-      this.changeForm.attr_name = row.attr_name;
-      this.changeForm.attr_sel = "many";
-      this.changeForm.attr_vals = row.attr_vals.toString();
+      this.changeTag.attr_vals = row.attr_vals.toString();
+      this.cat_id=row.cat_id;
+      this.attr_id=row.attr_id;
+      if(this.activeName=='first'){
+        this.type='动态参数';
+console.log(this.type);
+      }else{
+        this.type='静态属性';
+      }
+    },
+    change() {
+      console.log(this.theName);
+      this.changeTag.attr_name = this.theName;
+      if (this.activeName == "first") {
+          this.changeTag.attr_sel = "many";
+          
+        changeTag(this.cat_id,this.attr_id, this.changeTag).then((res) => {
+            if (res.meta.status == 200) {
+                this.$message({
+                    message: "添加参数成功！",
+              type: "success",
+            });
+            this.dialogVisibleCha = false;
+            this.getParamsList();
+          } else {
+              this.$message({
+                  message: res.meta.msg,
+              type: "error",
+            });
+          }
+          console.log(res);
+        });
+      } else {
+        
+          this.changeTag.attr_sel = "only";
+        changeTag(this.cat_id,this.attr_id, this.changeTag).then((res) => {
+            if (res.meta.status == 200) {
+                this.$message({
+                    message: "添加属性成功！",
+              type: "success",
+            });
+            this.dialogVisibleCha = false;
+            this.getParamsList();
+          } else {
+              this.$message({
+                  message: res.meta.msg,
+              type: "error",
+            });
+          }
 
-      changeArg(row.cat_id, row.attr_id, this.changeForm).then((res) => {
-        console.log(res);
-      });
+          console.log(res);
+          this.getParamsList();
+        });
+      }
+
+
+      this.$refs.addRuleRef.resetFields();
+
     },
     handleDelete(index, row) {
       console.log(index, row);
@@ -363,6 +444,36 @@ export default {
           });
         }
       });
+    },
+    showInput(scope) {
+      console.log(scope);
+      scope.inputVisible = true;
+      console.log(scope.inputVisible);
+      this.$nextTick(() => {
+        this.$refs.saveTagInput.$refs.input.focus();
+      });
+    },
+    //关闭标签
+    tagClose(data, i) {
+      data.attr_vals.splice(data.attr_vals.indexOf(i), 1);
+      this.changeTag.attr_vals = data.attr_vals.toString();
+      this.changeTag.attr_name = data.attr_name;
+      if (this.activeName == "first") {
+        this.changeTag.attr_sel = "many";
+        console.log(data);
+        console.log(this.changeTag);
+        changeTag(data.cat_id, data.attr_id, this.changeTag).then((res) => {
+          console.log(res);
+        });
+      } else {
+        this.changeTag.attr_sel = "only";
+        console.log(data);
+        console.log(this.changeTag);
+        changeTag(data.cat_id, data.attr_id, this.changeTag).then((res) => {
+          console.log(res);
+        });
+      }
+      console.log(i);
     },
   },
   components: {},
@@ -422,8 +533,8 @@ body {
   }
 }
 
-  .input-new-tag {
-    width: 90px;
-    margin-bottom: 4px;
-  }
+.input-new-tag {
+  width: 90px;
+  margin-bottom: 4px;
+}
 </style>
