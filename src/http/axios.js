@@ -49,10 +49,49 @@ export function shopType() {
     })
 }
 
+//添加分类
+export function typeAdd(addlist) {
+    return Http({
+        url: '/api/private/v1/categories',
+        data: addlist,
+        method: 'post',
+    })
+}
+
+
+
+//删除商品分类
+export function typeDel(id) {
+    return Http({
+        url: `/api/private/v1/categories/${id}`,
+
+        method: 'delete',
+    })
+}
+
+//商品列表数据
+export function typeList({ pagenum, pagesize, type }) {
+    return Http({
+        url: '/api/private/v1/categories',
+        params: { pagenum, pagesize, type }
+    })
+}
+
+//编辑分类
+export function typeCha(id, { cat_name }) {
+    return Http({
+        url: `/api/private/v1/categories/${id}`,
+        method: 'put',
+        data: { cat_name }
+    })
+}
+
+
 //商品动态参数
 export function shopArg({ cateId }) {
     return Http({
-        url: `/api/private/v1/categories/${cateId}/attributes`,
+        url: ` / api / private / v1 / categories / $ { cateId }
+        /attributes`,
         params: {
             sel: 'many',
 
