@@ -342,6 +342,7 @@ export default {
     getParamsList() {
       console.log(this.cateId);
       shopArg({ cateId: this.cateId }).then((res) => {
+        console.log(res);
         res.data.forEach((item) => {
           // 把字符串的可选项，分割为数组，重新赋值给attr_vals
           item.attr_vals =

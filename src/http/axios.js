@@ -90,8 +90,7 @@ export function typeCha(id, { cat_name }) {
 //商品动态参数
 export function shopArg({ cateId }) {
     return Http({
-        url: ` / api / private / v1 / categories / $ { cateId }
-        /attributes`,
+        url: `/api/private/v1/categories/${cateId}/attributes`,
         params: {
             sel: 'many',
 
@@ -172,4 +171,47 @@ export function changeTag(id, attr_id, changeTag) {
         data: changeTag
     })
 
+}
+
+//订单列表
+export function orders(page) {
+    return Http({
+        url: '/api/private/v1/orders',
+        method: 'get',
+        params: page
+    })
+}
+
+// 订单详情
+export function moreOrders(id) {
+    return Http({
+        url: '/api/private/v1/orders/' + id,
+    })
+}
+
+//修改订单状态
+export function OrdersChange(id, change) {
+    return Http({
+        url: '/api/private/v1/orders/' + id,
+        data: change,
+        method: 'put'
+    })
+}
+
+
+
+
+//物流信息
+export function Message() {
+    return Http({
+        url: `/api/private/v1/kuaidi/1106975712662`,
+    })
+}
+
+
+//数据统计表
+export function math() {
+    return Http({
+        url: `/api/private/v1/reports/type/1`,
+    })
 }

@@ -35,7 +35,7 @@
         <el-table-column label="操作">
           <!-- 编辑 -->
           <template slot-scope="scope">
-            <el-button size="mini" @click="handleEdit(scope.$index, scope.row)"
+            <el-button size="mini" @click="handleEdit(scope.row)"
               >编辑</el-button
             >
 
@@ -71,10 +71,7 @@
       </div>
     </div>
     <el-dialog title="收货地址" :visible.sync="dialogFormVisible">
-      <el-form :model="form" :rules="qqq">
-        <el-form-item label="商品ID" :label-width="formLabelWidth" prop="id">
-          <el-input v-model="id" autocomplete="off"></el-input>
-        </el-form-item>
+      <el-form :model="form" :rules="qqq" ref='ListChange'>
         <el-form-item
           label="商品名称"
           :label-width="formLabelWidth"
@@ -195,10 +192,10 @@ export default {
       return moment(date * 1000).format("YYYY-MM-DD HH:mm:ss");
     },
     //elementui自带函数
-    handleEdit(index, row) {
+    handleEdit(row) {
       this.dialogFormVisible = true;
       this.edit = row;
-      console.log(index, row);
+      console.log(row);
     },
     handleDelete(index, row) {
       this.del = row;
