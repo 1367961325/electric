@@ -49,10 +49,10 @@
           <el-breadcrumb separator-class="el-icon-arrow-right">
             <el-breadcrumb-item>首页</el-breadcrumb-item>
             <el-breadcrumb-item v-show="theFirst.authName">
-              {{ theFirst.authName }}
+              <router-link :to="'/home/'+theFirst.path">{{ theFirst.authName }}</router-link>
             </el-breadcrumb-item>
             <el-breadcrumb-item v-show="theSecond.authName">
-              {{ theSecond.authName }}
+              <router-link :to="'/home/'+theSecond.path">{{ theSecond.authName }}</router-link>
             </el-breadcrumb-item>
           </el-breadcrumb>
           <router-view></router-view>

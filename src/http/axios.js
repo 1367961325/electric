@@ -16,6 +16,7 @@ export function login(data) {
             username: data.un,
             password: data.ps
         },
+
         method: 'post'
     })
 }
@@ -130,7 +131,7 @@ export function shopChange(id, addForm) {
     return Http({
         url: `/api/private/v1/goods/${id}`,
         method: 'put',
-        params: addForm
+        data: addForm
     })
 }
 

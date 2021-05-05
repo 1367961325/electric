@@ -71,7 +71,7 @@
       </div>
     </div>
     <el-dialog title="收货地址" :visible.sync="dialogFormVisible">
-      <el-form :model="form" :rules="qqq" ref='ListChange'>
+      <el-form :model="form" ref="ListChange">
         <el-form-item
           label="商品名称"
           :label-width="formLabelWidth"
@@ -100,12 +100,23 @@
         >
           <el-input v-model="form.goods_weight" autocomplete="off"></el-input>
         </el-form-item>
+        <el-form-item label="商品分类" :label-width="formLabelWidth">
+          <div class="block">
+            <span class="demonstration"></span>
+            <el-cascader
+              ref="cascaderAdd"
+              :options="options"
+              @change="goodCat"
+              :props="props"
+              v-model="cat_id"
+            >
+            </el-cascader>
+          </div>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="submit"
-          >确 定</el-button
-        >
+        <el-button type="primary" @click="submit">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -117,10 +128,12 @@ import { shopList } from "../../http/axios.js";
 import { shopDel } from "../../http/axios.js";
 import { shopSearch } from "../../http/axios.js";
 import { shopChange } from "../../http/axios.js";
+import { shopType } from "../../http/axios.js";
 export default {
   props: {},
   data() {
     return {
+      cat_id: [],
       tableData: [],
       pagenum: 1,
       pagesize: 10,
@@ -134,42 +147,78 @@ export default {
       dialogFormVisible: false,
       formLabelWidth: "90px",
       id: "",
+      options: [],
+      props: {
+        label: "cat_name",
+        value: "cat_id",
+      },
       form: {
         goods_name: "",
         goods_price: "",
         goods_number: "",
         goods_weight: "",
+        goods_cat: "",
       },
-      qqq: {
-        id: [
-          { required: true, message: "id不能为空" }
-        ],
-        name: [
-          { required: true, message: "名字不能为空" }
-        ],
-        price: [
-          { required: true, message: "价格不能为空" },
-          { type: "number", message: "价格必须为数字值" },
-        ],
-        number: [
-          { required: true, message: "数量不能为空" },
-          { type: "number", message: "数量必须为数字值" },
-        ],
-        weight: [
-          { required: true, message: "重量不能为空" },
-          { type: "number", message: "重量必须为数字值" },
-        ],
-      },
+      // rule: {
+      //   name: [{ required: true }],
+      //   price: [
+      //     { required: true, message: "价格不能为空" },
+      //     { type: "number", message: "价格必须为数字值" },
+      //   ],
+      //   number: [
+      //     { required: true, message: "数量不能为空" },
+      //     { type: "number", message: "数量必须为数字值" },
+      //   ],
+      //   weight: [
+      //     { required: true, message: "重量不能为空" },
+      //     { type: "number", message: "重量必须为数字值" },
+      //   ],
+      // },
     };
   },
   methods: {
+    //编辑商品分类
+    goodCat(id) {
+      console.log(id);
+      if (id.length == 3) {
+        this.form.goods_cat = id[2].toString();
+      }
+    },
     //修改提交
-    submit(){
+    submit() {
       console.log(this.form);
       console.log(this.id);
-      shopChange(this.id,this.form).then(res=>{
+      shopChange(this.id, this.form).then((res) => {
         console.log(res);
-      })
+        if (res.meta.status == 200) {
+          this.$message({
+            message: res.meta.msg,
+            type: "success",
+          });
+        } else {
+          this.$message({
+            message: res.meta.msg,
+            type: "error",
+          });
+        }
+      });
+      this.form = {
+        goods_name: "",
+        goods_price: "",
+        goods_number: "",
+        goods_weight: "",
+        goods_cat: "",
+      };
+      (this.cat_id = ""),
+        shopList({ pagenum: this.pagenum, pagesize: this.pagesize }).then(
+          (res) => {
+            console.log(this.pagenum);
+            this.tableData = res.data.goods;
+            this.total = res.data;
+            console.log(res);
+          }
+        );
+      this.dialogFormVisible = false;
     },
     //查询
     search() {
@@ -180,6 +229,17 @@ export default {
         console.log(res);
         this.tableData = [res.data];
         console.log(this.tableData);
+        if (res.meta.status == 200) {
+          this.$message({
+            message: res.meta.msg,
+            type: "success",
+          });
+        } else {
+          this.$message({
+            message: res.meta.msg,
+            type: "error",
+          });
+        }
       });
     },
     //时间格式
@@ -195,10 +255,15 @@ export default {
     handleEdit(row) {
       this.dialogFormVisible = true;
       this.edit = row;
+      this.id = row.goods_id;
       console.log(row);
+      shopType().then((res) => {
+        this.options = res.data;
+        console.log(this.options);
+      });
     },
     handleDelete(index, row) {
-      this.del = rouw;
+      this.del = row;
       this.dialogVisible = true;
 
       console.log(index, row);
@@ -236,6 +301,17 @@ export default {
     confirm() {
       this.innerVisible = true;
       shopDel(this.del.goods_id).then((res) => {
+        if (res.meta.status == 200) {
+          this.$message({
+            message: res.meta.msg,
+            type: "success",
+          });
+        } else {
+          this.$message({
+            message: res.meta.msg,
+            type: "error",
+          });
+        }
         console.log(res);
         shopList({ pagenum: this.pagenum, pagesize: this.pagesize }).then(
           (res) => {
