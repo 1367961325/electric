@@ -198,7 +198,7 @@ export default {
       console.log(row);
     },
     handleDelete(index, row) {
-      this.del = row;
+      this.del = rouw;
       this.dialogVisible = true;
 
       console.log(index, row);

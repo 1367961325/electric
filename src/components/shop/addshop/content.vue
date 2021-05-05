@@ -28,6 +28,7 @@ export default {
           console.log(formObj);
         });
       }
+      console.log(this.$store.state.addForm);
       shopSubmit(this.$store.state.addForm).then((res) => {
         console.log(res);
         if (res.meta.status == 201) {

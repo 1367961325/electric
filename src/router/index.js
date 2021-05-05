@@ -5,7 +5,7 @@
  * @Author: YAP
  * @Date: 2021-04-17 10:16:43
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-04-17 16:24:33
+ * @LastEditTime: 2021-05-04 21:16:36
  */
 import Vue from 'vue'
 import VueRouter from 'vue-router'
@@ -30,12 +30,17 @@ const routes = [{
         children: [{
                 path: 'users',
                 component: () =>
-                    import ( /* webpackChunkName: "users" */ '../components/users.vue')
+                    import ( /* webpackChunkName: "users" */ '../components/users/users.vue')
             },
             {
                 path: 'rights',
                 component: () =>
-                    import ( /* webpackChunkName: "rights" */ '../components/rights.vue')
+                    import ( /* webpackChunkName: "rights" */ '../components/right/rights.vue')
+            },
+            {
+                path: 'roles',
+                component: () =>
+                    import ( /* webpackChunkName: "home" */ '../components/right/roles.vue')
             },
             {
                 path: 'reports',
@@ -81,11 +86,6 @@ const routes = [{
                 ]
             },
             {
-                path: 'roles',
-                component: () =>
-                    import ( /* webpackChunkName: "home" */ '../components/roles.vue')
-            },
-            {
                 path: 'params',
                 component: () =>
                     import ( /* webpackChunkName: "home" */ '../components/shop/params.vue')
@@ -94,7 +94,7 @@ const routes = [{
                 path: 'categories',
                 component: () =>
                     import ( /* webpackChunkName: "home" */ '../components/shop/categories.vue')
-            },
+            }
         ],
 
 

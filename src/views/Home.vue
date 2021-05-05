@@ -5,7 +5,7 @@
  * @Author: YAP
  * @Date: 2021-04-17 10:16:43
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-04-17 19:04:57
+ * @LastEditTime: 2021-04-30 16:32:42
 -->
 <template>
   <div id="header">
@@ -48,11 +48,10 @@
         <el-main>
           <el-breadcrumb separator-class="el-icon-arrow-right">
             <el-breadcrumb-item>首页</el-breadcrumb-item>
-
-            <el-breadcrumb-item>
+            <el-breadcrumb-item v-show="theFirst.authName">
               {{ theFirst.authName }}
             </el-breadcrumb-item>
-            <el-breadcrumb-item>
+            <el-breadcrumb-item v-show="theSecond.authName">
               {{ theSecond.authName }}
             </el-breadcrumb-item>
           </el-breadcrumb>

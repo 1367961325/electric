@@ -5,7 +5,7 @@
  * @Author: YAP
  * @Date: 2021-04-13 14:35:49
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-04-17 18:52:38
+ * @LastEditTime: 2021-05-02 22:47:29
  */
 import Http from './http'
 //注册登录
@@ -132,8 +132,6 @@ export function shopChange(id, addForm) {
         method: 'put',
         params: addForm
     })
-
-
 }
 
 
