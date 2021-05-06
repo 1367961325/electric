@@ -105,7 +105,17 @@
       </div>
     </el-dialog>
     <!-- 物流信息弹框 -->
-    <el-dialog :visible.sync="dialogFormMessage"></el-dialog>
+    <el-dialog :visible.sync="dialogFormMessage" title="物流信息">
+ <el-timeline>
+    <el-timeline-item
+      v-for="(activity, index) in activities.data"
+      :key="index"
+      :timestamp="activity.ftime">
+      {{activity.context}}
+    </el-timeline-item>
+  </el-timeline>
+
+    </el-dialog>
     <!-- 订单详情弹框 -->
     <el-dialog :visible.sync="dialogFormDetails" title="订单详情" width="70%">
       <el-form>
@@ -183,6 +193,7 @@ export default {
   props: {},
   data() {
     return {
+      activities:[],
       changeRowId:'',
       dialogFormChange: false,
       detailsObj: {},
@@ -244,7 +255,8 @@ export default {
     // 物流信息
     logisticsMessage(row) {
       Message().then((res) => {
-        console.log(res);
+        this.activities=res.data;
+        console.log(res.data);
       });
 
       this.dialogFormMessage = true;
