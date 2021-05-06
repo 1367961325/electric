@@ -5,7 +5,7 @@
  * @Author: YAP
  * @Date: 2021-04-27 19:12:53
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-05-05 15:28:14
+ * @LastEditTime: 2021-05-06 08:28:39
 -->
 
   <template>
@@ -143,7 +143,7 @@
         </el-form>
         <span slot="footer" class="dialog-footer">
         <el-button @click="editDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="setRole">确 定</el-button>
+        <el-button type="primary" @click="editUserInfo">确 定</el-button>
         </span>
     </el-dialog>
     <!-- 分配角色的对话框 -->
@@ -176,7 +176,7 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="setRoleDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="setRole()"
+        <el-button type="primary" @click="setRole"
           >确 定</el-button
         >
       </span>

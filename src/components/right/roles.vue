@@ -61,13 +61,7 @@
         <el-table-column prop="roleDesc" label="角色描述"></el-table-column>
         <el-table-column label="操作" width="350px">
           <template slot-scope="scope">
-            <el-tooltip
-              class="item"
-              effect="dark"
-              content="编辑"
-              placement="top"
-              :enterable="false"
-            >
+          
               <el-button
                 type="primary"
                 icon="el-icon-edit"
@@ -75,14 +69,6 @@
                 @click="searchRole(scope.row.id)"
                 >编辑</el-button
               >
-            </el-tooltip>
-            <el-tooltip
-              class="item"
-              effect="dark"
-              content="删除"
-              placement="top"
-              :enterable="false"
-            >
               <el-button
                 type="danger"
                 icon="el-icon-delete"
@@ -90,14 +76,6 @@
                 @click="removeRole(scope.row.id)"
                 >删除</el-button
               >
-            </el-tooltip>
-            <el-tooltip
-              class="item"
-              effect="dark"
-              content="分配权限"
-              placement="top"
-              :enterable="false"
-            >
               <el-button
                 type="warning"
                 icon="el-icon-setting"
@@ -105,7 +83,6 @@
                 @click="setRightDialog(scope.row)"
                 >分配权限</el-button
               >
-            </el-tooltip>
           </template>
         </el-table-column>
       </el-table>
