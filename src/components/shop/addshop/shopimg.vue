@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-upload
-      action="http://localhost:8888/api/private/v1/upload"
+      action="http://192.168.1.10:8888/api/private/v1/upload"
       :headers='header'
       :on-preview="handlePreview"
       :on-remove="handleRemove"

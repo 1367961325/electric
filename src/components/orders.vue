@@ -233,7 +233,7 @@ export default {
       OrdersChange(this.changeRowId,this.more).then(res=>{
           console.log(res);
       })
-      
+      this.updateList();
         this.dialogFormChange =false;
     },
     handleSizeChange(val) {
@@ -288,7 +288,6 @@ export default {
       this.more.pay_status=res.data.pay_status;
       });
       this.changeRowId=row.order_id;
-      
       this.dialogFormChange = true;
     },
     updateList() {
